@@ -11,6 +11,18 @@ A simple, opinionated setup for node CLIs.
 
 `yarn`.
 
+In project you'll need to edit:
+
+- Package.json
+    - rename
+    - change version
+    - change repo
+    - change author
+- Clear changelog.md
+- Readme
+    - title
+    - badges
+
 ## Features:
 
 - `.editorconfig`
