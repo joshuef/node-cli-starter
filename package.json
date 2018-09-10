@@ -18,6 +18,7 @@
     "build": "rimraf ./lib && babel src -d lib",
     "dry-run": "NODE_ENV=test babel-node src/upload",
     "dry-run-built": "NODE_ENV=test node ./lib -s dist",
+    "createNfsList": "NODE_ENV=test babel-node src/createNfsList",
     "get": "NODE_ENV=test babel-node src/get",
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
     "lint-fix": "yarn run lint --fix",
