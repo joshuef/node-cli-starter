@@ -1,5 +1,5 @@
-import { authenticate } from '../safeNetwork';
 import logger from '../logger';
+import { addEntryToMutable, createMutable } from '../safeNetwork';
 
 
 //
@@ -13,28 +13,31 @@ import logger from '../logger';
 //
 //
 
-const createNfsList = async ( { mdlocationUri, pathsCasArray, encrypt = false } ) =>
+// const createNfsList = async ( { mdlocationUri = '', pathsCasArray = [], encrypt = false } ) =>
+export const createNfsList = async ( data ) =>
 {
-    if( ! mdlocationUri )
-    {
-
-    }
+    return createMutable( data );
+    // let md;
+    //
+    // if( ! options.mdlocationUri )
+    // {
+    //     md = await createMutable();
+    //
+    // }
+    // else
+    // {
+    //     // setup the MD/RDF from location.
+    //     md = await createMutable();
+    // }
+    //
+    // return md;
 }
 
-export const nfsListing = async ( uri ) =>
+export const addNfsListing = async ( md, key, value ) =>
 {
-    try
-    {
-        let app = await authenticate();
-        const data = await app.webFetch( uri );
-        logger.info( 'data received:' , data.body.toString() )
-    }
-    catch( err )
-    {
-        logger.error( 'an error in nfsListing: ',err )
-        throw err;
-    }
+    logger.trace('addNfsListing')
+    await addEntryToMutable( { md, key, value } );
+
+    logger.trace('addNfsListing done!!!!! for', key );
 
 }
-
-export default nfsListing

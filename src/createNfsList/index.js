@@ -1,8 +1,7 @@
 import "core-js/shim";
 import logger from '../logger';
 import cliOptions from '../cli-options';
-import createNfsList from './createNfsList';
-
+import {addNfsListing, createNfsList} from './createNfsList';
 
 const stdin = process.openStdin();
 
@@ -18,11 +17,14 @@ process.on( 'SIGINT', function ()
     process.exit( 0 );
 } );
 
+let mutableDatum;
+const dataObj = {};
 
 stdin.on( 'data', async ( chunk ) =>
 {
     const chunkArray =  chunk.split( '\n' ) ;
-    chunkArray.forEach( d =>
+
+    chunkArray.forEach( async d =>
     {
         const uriPair = d.split( ' ' );
 
@@ -30,28 +32,26 @@ stdin.on( 'data', async ( chunk ) =>
         const uri = uriPair[1];
         if( !path.length || ! uri.length ) return;
 
-        const obj = {
-            path,
-            uri,
-        }
-        data.push( Promise.resolve( obj ) );
+
+        dataObj[path] = uri;
+
+        // if one doesnt exist.... how do we check that? with --target ops?
+        // mutableDatum = mutableDatum || await createNfsList( );
+
+        // data.push( addNfsListing( mutableDatum, path, uri ) );
 
     } );
-
-    //do stuff.
-
-
 
 } );
 
 stdin.on( 'end', async () =>
 {
 
-    let alldata = await Promise.all( data )
+    // let alldata = await Promise.all( data )
 
-    // console.log( "DATA:\n" + alldata + "\nEND DATA" );
+    // alldata.forEach( d => console.log( d ) )
 
-    alldata.forEach( d => console.log( d ) )
+     await createNfsList( dataObj );
 
     console.log( '-----------------------------' )
     process.exit();

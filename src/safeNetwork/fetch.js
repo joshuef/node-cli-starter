@@ -1,7 +1,6 @@
 import authenticate from './authenticate';
-// import log from 'bristol';
+// import logger from '../logger';
 
-// let app;
 
 // TODO: Q. how to persist app for many fetches/efficiency?
 const fetch = async ( uri ) =>

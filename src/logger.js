@@ -33,4 +33,30 @@ log.addTarget( 'console' ).withFormatter( palin,
     .withLowestSeverity( logLevel )
     .withHighestSeverity( 'error' )
 
+
+
+process.on( 'uncaughtTypeError', ( err ) =>
+{
+    log.error( '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>' );
+    log.error( 'whoops! there was an uncaught type error:' );
+    log.error( err );
+    log.error( err.file );
+    log.error( err.line );
+} );
+
+process.on( 'uncaughtException', ( err ) =>
+{
+    log.error( '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>' );
+    log.error( 'whoops! there was an uncaught error:' );
+    log.error( err );
+    log.error( err.file );
+    log.error( err.line );
+} );
+
+process.on( 'unhandledRejection', ( reason, p ) =>
+{
+    log.error( '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>' );
+    log.error( 'Unhandled Rejection:' );
+    log.error( reason );
+} );
 export default log;
