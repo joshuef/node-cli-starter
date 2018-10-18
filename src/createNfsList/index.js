@@ -62,13 +62,13 @@ stdin.on( 'end', async () =>
 // TODO: check if processing or no... (via args?)
 
 // self executing cli func
-( async () =>
-{
-    logger.info( 's-createNfsList starting' );
-
-    // if( cliOptions. )
-    // await createNfsList( cliOptions.get );
-
-    // dont auth exit as we may be piping.
-    // process.exit();
-} )()
+// ( async () =>
+// {
+//     logger.info( 's-createNfsList starting' );
+//
+//     // if( cliOptions. )
+//     // await createNfsList( cliOptions.get );
+//
+//     // dont auth exit as we may be piping.
+//     // process.exit();
+// } )()

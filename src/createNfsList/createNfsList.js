@@ -1,7 +1,8 @@
 import logger from '../logger';
 import { addEntryToMutable, createMutable } from '../safeNetwork';
 
-
+import { resolveableMap } from 'safe-schema';
+import { man, validate } from 'rdf-check-mate';
 //
 // pass MD content address
 // if existing... fails (use update to udpate)
@@ -16,7 +17,33 @@ import { addEntryToMutable, createMutable } from '../safeNetwork';
 // const createNfsList = async ( { mdlocationUri = '', pathsCasArray = [], encrypt = false } ) =>
 export const createNfsList = async ( data ) =>
 {
-    return createMutable( data );
+    // TODO: create NFS list is analogous to create data w/ schema.
+
+    // we have data
+    // we have schema (resolveableMap)
+    // so we parse...
+
+    const ourFileList = { entriesList: data };
+
+    logger.trace('Creationinnnnn', ourFileList);
+    // Testing with:
+
+    //safe schema defaultValue...
+    await man( resolveableMap );
+
+    // specifics of our file list over resolveable map...
+    // each is a file...
+    // do we want metadata here?
+
+    await validate( resolveableMap, ourFileList );
+
+
+    // do generic conversion using map.
+
+    logger.trace('valid±±!!!');
+
+    // return null;
+    // return createMutable( data );
     // let md;
     //
     // if( ! options.mdlocationUri )
@@ -41,3 +68,7 @@ export const addNfsListing = async ( md, key, value ) =>
     logger.trace('addNfsListing done!!!!! for', key );
 
 }
+
+
+
+createNfsList();

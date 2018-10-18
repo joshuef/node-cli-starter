@@ -5,14 +5,14 @@
   "license": "MIT",
   "bin": "lib/upload.js",
   "repository": {
-  "type": "git",
-  "url": "git+https://github.com/joshuef/node-cli-starter"
-    },
-    "author": {
+    "type": "git",
+    "url": "git+https://github.com/joshuef/node-cli-starter"
+  },
+  "author": {
     "name": "joshuef",
     "email": "joshuef@gmail.com",
     "url": "https://github.com/joshuef"
-    },
+  },
   "scripts": {
     "bash-test": "for d in $(seq 1 5); do yarn dry-run -s dist || break; sleep 1; done;",
     "build": "rimraf ./lib && babel src -d lib",
@@ -35,6 +35,7 @@
     "klaw": "3.0.0",
     "mime-types": "2.1.20",
     "palin": "2.2.0",
+    "rdflib": "0.19.0",
     "request": "2.88.0",
     "request-promise-native": "1.0.5"
   },
