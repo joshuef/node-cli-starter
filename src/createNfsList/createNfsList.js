@@ -3,6 +3,9 @@ import { addEntryToMutable, createMutable } from '../safeNetwork';
 
 import { resolveableMap } from 'safe-schema';
 import { man, validate } from 'rdf-check-mate';
+import rdflib from 'rdflib';
+
+import rdfMePlz from '../rdfMePlz';
 //
 // pass MD content address
 // if existing... fails (use update to udpate)
@@ -23,9 +26,13 @@ export const createNfsList = async ( data ) =>
     // we have schema (resolveableMap)
     // so we parse...
 
-    const ourFileList = { entriesList: data };
+    // TODO: this needs to have an ID to be passed to RDFMEPLZ
+    const ourFileList = {
+        id          : 'safe://asdadsadsa',
+        entriesList : {  'somefile/path': 'safe://asdsadsadsadad' }
+    };
 
-    logger.trace('Creationinnnnn', ourFileList);
+    logger.trace( 'Creationinnnnn', ourFileList );
     // Testing with:
 
     //safe schema defaultValue...
@@ -40,7 +47,24 @@ export const createNfsList = async ( data ) =>
 
     // do generic conversion using map.
 
-    logger.trace('valid±±!!!');
+
+    // why is this the other way round?
+    let graph = await rdfMePlz( ourFileList, resolveableMap );
+
+    logger.trace( 'valid±±!!!', graph, ourFileList.id );
+
+    rdflib.serialize( null, graph, ourFileList.id, 'application/ld+json', ( err, result ) =>
+    {
+        if( err )
+        {
+            logger.error('!!!!!!!!!!!!!!!!!errorrrr', err)
+            throw new Error( err );
+        }
+
+        console.log('SERLIALISEDDDDD')
+        console.log(result)
+    });
+
 
     // return null;
     // return createMutable( data );
@@ -62,10 +86,10 @@ export const createNfsList = async ( data ) =>
 
 export const addNfsListing = async ( md, key, value ) =>
 {
-    logger.trace('addNfsListing')
+    logger.trace( 'addNfsListing' )
     await addEntryToMutable( { md, key, value } );
 
-    logger.trace('addNfsListing done!!!!! for', key );
+    logger.trace( 'addNfsListing done!!!!! for', key );
 
 }
 
