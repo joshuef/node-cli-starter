@@ -1,7 +1,7 @@
 import logger from '../logger';
 import { addEntryToMutable, createMutable } from '../safeNetwork';
 
-import { resolveableMap } from 'safe-schema';
+import { resolveableMap, safeId } from 'safe-schema';
 import { man, validate } from 'rdf-check-mate';
 import rdflib from 'rdflib';
 
@@ -32,6 +32,15 @@ export const createNfsList = async ( data ) =>
         entriesList : {  'somefile/path': 'safe://asdsadsadsadad' }
     };
 
+
+    const ourWebId = {
+        id     : 'safe://mywebid.gabriel',
+        name    : 'Gabriel Viganotti',
+        nick    : 'bochaco',
+        website : 'safe://mywebsite.gabriel',
+        image   : 'safe://mywebsite.gabriel/images/myavatar',
+    };
+
     logger.trace( 'Creationinnnnn', ourFileList );
     // Testing with:
 
@@ -42,14 +51,16 @@ export const createNfsList = async ( data ) =>
     // each is a file...
     // do we want metadata here?
 
-    await validate( resolveableMap, ourFileList );
+    await validate( safeId, ourWebId );
+    // await validate( resolveableMap, ourFileList );
 
 
     // do generic conversion using map.
 
 
     // why is this the other way round?
-    let graph = await rdfMePlz( ourFileList, resolveableMap );
+    let graph = await rdfMePlz( ourWebId, safeId );
+    // let graph = await rdfMePlz( ourFileList, resolveableMap );
 
     logger.trace( 'valid±±!!!', graph, ourFileList.id );
 
@@ -57,13 +68,13 @@ export const createNfsList = async ( data ) =>
     {
         if( err )
         {
-            logger.error('!!!!!!!!!!!!!!!!!errorrrr', err)
+            logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
             throw new Error( err );
         }
 
-        console.log('SERLIALISEDDDDD')
-        console.log(result)
-    });
+        console.log( 'SERLIALISEDDDDD' )
+        console.log( result )
+    } );
 
 
     // return null;

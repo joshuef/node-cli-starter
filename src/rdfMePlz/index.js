@@ -53,12 +53,14 @@ const ohMyMakeMeRDF = async ( dataObject, schema ) =>
         const vocabToUse = typeInfoArray[0];
         const vocabType = typeInfoArray[1];
 
-
-
         logger.trace( 'label::::', label, vocabToUse, vocabType );
+        creatingGraph.add( id, vocabs.owl('knows'), rdflib.literal( 'it works' )  );
+
+
         if( label && dataObject[ label ] )
         {
             logger.warn( 'THIS EXISTSSSSSSSSSSS', label );
+            logger.warn( 'dataObject[ label ]dataObject[ label ]dataObject[ label ]dataObject[ label ]', dataObject[ label ] );
 
             // for each schema prop item:
 
@@ -67,11 +69,20 @@ const ohMyMakeMeRDF = async ( dataObject, schema ) =>
                 // `tODO:` ccheck what kind of type to be adding: 'literal' etc....
                 if( typeof dataObject[ label ] === 'string' )
                 {
+                    logger.warn( 'setting string', label );
+
                     creatingGraph.add( id, vocabs[ vocabToUse ][ vocabType ], rdflib.literal( dataObject[ label ] )  );
                 }
 
+                if( Array.isArray( dataObject[ label ] ) )
+                {
+                    logger.warn( 'setting array', label );
+                    creatingGraph.add( id, vocabs[ vocabToUse ][ vocabType ], rdflib.list( dataObject[ label ] )  );
+                }
+
             } catch (e) {
-                console.error('>>>>>>>.problem adding to graph');
+                console.error('>>>>>>>.problem adding to graph',e);
+                logger.error('was passing:::::::::::', id, vocabs[ vocabToUse ][ vocabType ], dataObject[ label ] );
             }
 
 
