@@ -62,7 +62,7 @@ export const createNfsList = async ( data ) =>
     let graph = await rdfMePlz( ourWebId, safeId );
     // let graph = await rdfMePlz( ourFileList, resolveableMap );
 
-    logger.trace( 'valid±±!!!', graph, ourFileList.id );
+    // logger.trace( 'valid±±!!!', graph, ourFileList.id );
 
     rdflib.serialize( null, graph, ourFileList.id, 'application/ld+json', ( err, result ) =>
     {

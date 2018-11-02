@@ -53,7 +53,7 @@ const ohMyMakeMeRDF = async ( dataObject, schema ) =>
         const vocabToUse = typeInfoArray[0];
         const vocabType = typeInfoArray[1];
 
-        logger.trace( 'label::::', label, vocabToUse, vocabType );
+        logger.trace( 'label????????????????????????????????????????::::', label, vocabToUse, vocabType );
         creatingGraph.add( id, vocabs.owl('knows'), rdflib.literal( 'it works' )  );
 
 
@@ -71,18 +71,20 @@ const ohMyMakeMeRDF = async ( dataObject, schema ) =>
                 {
                     logger.warn( 'setting string', label );
 
-                    creatingGraph.add( id, vocabs[ vocabToUse ][ vocabType ], rdflib.literal( dataObject[ label ] )  );
+                    creatingGraph.add( id, vocabs[ vocabToUse ]( vocabType ), rdflib.literal( dataObject[ label ] )  );
                 }
 
                 if( Array.isArray( dataObject[ label ] ) )
                 {
                     logger.warn( 'setting array', label );
-                    creatingGraph.add( id, vocabs[ vocabToUse ][ vocabType ], rdflib.list( dataObject[ label ] )  );
+                    creatingGraph.add( id, vocabs[ vocabToUse ]( vocabType ), rdflib.list( dataObject[ label ] )  );
                 }
 
             } catch (e) {
                 console.error('>>>>>>>.problem adding to graph',e);
-                logger.error('was passing:::::::::::', id, vocabs[ vocabToUse ][ vocabType ], dataObject[ label ] );
+                logger.error('was passing::::::::::: id:', id );
+                logger.error('was passing::::::::::: vocab:', vocabs[ vocabToUse ](vocabType) );
+                logger.error('was passing::::::::::: label:', dataObject[ label ] );
             }
 
 
