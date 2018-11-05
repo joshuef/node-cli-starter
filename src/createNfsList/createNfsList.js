@@ -28,13 +28,19 @@ export const createNfsList = async ( data ) =>
 
     // TODO: this needs to have an ID to be passed to RDFMEPLZ
     const ourFileList = {
+        version     : "1",
         id          : 'safe://asdadsadsa',
-        entriesList : {  'somefile/path': 'safe://asdsadsadsadad' }
+        ':default'  : 'safe://asdasdasdasdasdsadasdadsa',
+        entriesList : {
+            'somefile/path'    : 'safe://1111111',
+            'another/path'     : 'safe://2222222',
+            'another/path/sub' : 'safe://33333',
+        }
     };
 
 
     const ourWebId = {
-        id     : 'safe://mywebid.gabriel#me',
+        id      : 'safe://mywebid.gabriel#me',
         name    : 'Gabriel Viganotti',
         nick    : 'bochaco',
         website : 'safe://mywebsite.gabriel',
@@ -51,20 +57,38 @@ export const createNfsList = async ( data ) =>
     // each is a file...
     // do we want metadata here?
 
-    await validate( safeId, ourWebId );
-    // await validate( resolveableMap, ourFileList );
+    // await validate( safeId, ourWebId );
+    await validate( resolveableMap, ourFileList );
 
 
     // do generic conversion using map.
 
 
     // why is this the other way round?
-    let graph = await rdfMePlz( ourWebId, safeId );
-    // let graph = await rdfMePlz( ourFileList, resolveableMap );
+    // let graph = await rdfMePlz( ourWebId, safeId );
+    //
+    // // logger.trace( 'valid±±!!!', graph, ourFileList.id );
+    //
+    // rdflib.serialize( null, graph, ourFileList.id, 'text/turtle', ( err, result ) =>
+    // // rdflib.serialize( null, graph, ourFileList.id, 'application/ld+json', ( err, result ) =>
+    // {
+    //     if( err )
+    //     {
+    //         logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
+    //         throw new Error( err );
+    //     }
+    //
+    //     logger.info( 'SERLIALISEDDDDD' )
+    //     console.log( result )
+    // } );
+    //
+    let anothergraph = await rdfMePlz( ourFileList, resolveableMap );
 
-    // logger.trace( 'valid±±!!!', graph, ourFileList.id );
 
-    rdflib.serialize( null, graph, ourFileList.id, 'text/turtle', ( err, result ) =>
+
+
+
+    rdflib.serialize( null, anothergraph, ourFileList.id, 'text/turtle', ( err, result ) =>
     // rdflib.serialize( null, graph, ourFileList.id, 'application/ld+json', ( err, result ) =>
     {
         if( err )
@@ -73,7 +97,7 @@ export const createNfsList = async ( data ) =>
             throw new Error( err );
         }
 
-        console.log( 'SERLIALISEDDDDD' )
+        logger.info( 'SERLIALISEDDDDD THE RESOLVEABLEMAPPP' )
         console.log( result )
     } );
 

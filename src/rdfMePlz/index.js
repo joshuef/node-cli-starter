@@ -7,7 +7,7 @@ import rdflib from 'rdflib';
 
 // loop through schema.... apply from object.
 
-
+console.log(rdflib)
 const ohMyMakeMeRDF = async ( dataObject, schema ) =>
 {
     logger.warn( 'You want to make RDF data. OH MY', schema['@context'] )
@@ -59,7 +59,7 @@ const ohMyMakeMeRDF = async ( dataObject, schema ) =>
         if( label && dataObject[ label ] )
         {
             logger.warn( 'THIS EXISTSSSSSSSSSSS', label );
-            logger.warn( 'dataObject[ label ]dataObject[ label ]dataObject[ label ]dataObject[ label ]', dataObject[ label ] );
+            logger.warn( 'dataObject[ label ]dataObject[ label ]dataObject[ label ]dataObject[ label ]', dataObject[ label ], typeof dataObject[ label ]);
 
             // for each schema prop item:
 
@@ -68,7 +68,7 @@ const ohMyMakeMeRDF = async ( dataObject, schema ) =>
                 // `tODO:` ccheck what kind of type to be adding: 'literal' etc....
                 if( typeof dataObject[ label ] === 'string' )
                 {
-                    logger.warn( 'setting string', label );
+                    logger.warn( 'setting string', label, dataObject[ label ], 'tobe', vocabs[ vocabToUse ]( vocabType ) );
 
                     creatingGraph.add( id, vocabs[ vocabToUse ]( vocabType ), rdflib.literal( dataObject[ label ] )  );
                 }
@@ -76,7 +76,16 @@ const ohMyMakeMeRDF = async ( dataObject, schema ) =>
                 if( Array.isArray( dataObject[ label ] ) )
                 {
                     logger.warn( 'setting array', label );
-                    creatingGraph.add( id, vocabs[ vocabToUse ]( vocabType ), rdflib.list( dataObject[ label ] )  );
+                    const collection = new rdflib.Collection( dataObject[ label ] )
+                    creatingGraph.add( id, vocabs[ vocabToUse ]( vocabType ), collection );
+                }
+                else if ( typeof dataObject[ label ] === 'object' )
+                {
+                    logger.warn( 'setting up an object^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ for', label );
+
+                    const arrayOfEntries = Object.entries( dataObject[ label ] );
+                    const collection = new rdflib.Collection( arrayOfEntries  )
+                    creatingGraph.add( id, vocabs[ vocabToUse ]( vocabType ), collection );
                 }
 
             } catch (e) {
