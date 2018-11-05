@@ -34,7 +34,7 @@ export const createNfsList = async ( data ) =>
 
 
     const ourWebId = {
-        id     : 'safe://mywebid.gabriel',
+        id     : 'safe://mywebid.gabriel#me',
         name    : 'Gabriel Viganotti',
         nick    : 'bochaco',
         website : 'safe://mywebsite.gabriel',
@@ -64,7 +64,8 @@ export const createNfsList = async ( data ) =>
 
     // logger.trace( 'valid±±!!!', graph, ourFileList.id );
 
-    rdflib.serialize( null, graph, ourFileList.id, 'application/ld+json', ( err, result ) =>
+    rdflib.serialize( null, graph, ourFileList.id, 'text/turtle', ( err, result ) =>
+    // rdflib.serialize( null, graph, ourFileList.id, 'application/ld+json', ( err, result ) =>
     {
         if( err )
         {
