@@ -48,7 +48,7 @@ const ohMyMakeMeRDF = async ( dataObject, schema ) =>
 
         // Object.entries( dataObject ).forEach( ([key, value]) => {
         const label = prop['rdfs:label'];
-        const typeInfoArray = prop['@type'].split( ':' );
+        const typeInfoArray = prop['@id'].split( ':' );
 
         const vocabToUse = typeInfoArray[0];
         const vocabType = typeInfoArray[1];
