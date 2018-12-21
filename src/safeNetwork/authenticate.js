@@ -22,7 +22,10 @@ const authenticate = async ( ) =>
     try
     {
 
-        app = await initialiseApp( appInfo, null, { forceUseMock: true } );
+        app = await initialiseApp( appInfo, null, {
+            forceUseMock: true,
+            enableExperimentalApis : true
+        } );
 
         if( process.env.NODE_ENV === 'test' )
         {

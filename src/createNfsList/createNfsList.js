@@ -84,6 +84,15 @@ export const createNfsList = async ( data ) =>
     //
     let anothergraph = await rdfMePlz( ourFileList, resolveableMap );
 
+    //
+    // const someMD = {
+    //     thing : 'stuff',
+    //     more  : 'other'
+    // }
+    //
+    // save( someMD );
+
+    // save(ourFileList).schema(resolveableMap);
 
 
 
