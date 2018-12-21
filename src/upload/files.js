@@ -43,7 +43,7 @@ export const enKlaw = ( dir ) =>
     } )
 }
 
-export const getCidsForFiles = async ( options ) =>
+export const getXorUrlsForFiles = async ( options ) =>
 {
     if( ! options.srcDir )
     {

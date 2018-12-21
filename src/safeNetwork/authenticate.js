@@ -33,6 +33,7 @@ const authenticate = async ( ) =>
         }
         else
         {
+            console.warn( 'Nothing has been set up with attempting to auth. Use NODE_ENV=test')
             // TODO: STUFF
             // await app.auth.loginForTest( null, publicNamesContainerPerms );
 

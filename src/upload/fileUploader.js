@@ -49,7 +49,7 @@ export const handleFileUpload = async ( app, theFilePath, networkPath ) =>
 
         return {
             path : theFilePath,
-            uri  : `safe://${address.cid}`
+            uri  : `safe://${address.xorUrl}`
         }
 
         logger.trace( 's-sync-handling-file-upload-work' )

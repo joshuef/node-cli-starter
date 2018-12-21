@@ -3,7 +3,7 @@ import path from 'path';
 import cliOptions from '../cli-options';
 import logger from '../logger';
 
-import { getCidsForFiles } from './files';
+import { getXorUrlsForFiles } from './files';
 
 
 // TODO: enable passing file OR dir.
@@ -12,9 +12,9 @@ import { getCidsForFiles } from './files';
 ( async () =>
 {
     logger.info( 'starting upload...' )
-    const arrayOfCids = await getCidsForFiles( cliOptions );
+    const arrayOfXorUrls = await getXorUrlsForFiles( cliOptions );
 
-    await Promise.all( arrayOfCids.map( async ( fileObj, i ) =>
+    await Promise.all( arrayOfXorUrls.map( async ( fileObj, i ) =>
     {
         const deets = await fileObj;
         console.log( deets.path, deets.uri )

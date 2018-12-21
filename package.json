@@ -23,7 +23,7 @@
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
     "lint-fix": "yarn run lint --fix",
     "prepush": "yarn lint && yarn test",
-    "start": "babel-node src/upload.js",
+    "start": "babel-node src/upload",
     "test": "jest --maxWorkers=2",
     "bump": "standard-version"
   },

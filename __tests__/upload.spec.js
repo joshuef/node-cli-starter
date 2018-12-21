@@ -1,10 +1,10 @@
-import { getCidsForFiles } from '../src/upload/files';
+import { getXorUrlsForFiles } from '../src/upload/files';
 
-describe( 'getCidsForFiles', () =>
+describe( 'getXorUrlsForFiles', () =>
 {
     it( 'should exist', () =>
     {
-        expect( getCidsForFiles ).toBeDefined();
+        expect( getXorUrlsForFiles ).toBeDefined();
     } );
 
 } )
