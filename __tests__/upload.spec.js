@@ -1,10 +1,10 @@
-import { getXorUrlsForFiles } from '../src/upload/files';
+import { uploadFilesAndRetrieveXorUrls } from '../src/upload/files';
 
-describe( 'getXorUrlsForFiles', () =>
+describe( 'uploadFilesAndRetrieveXorUrls', () =>
 {
     it( 'should exist', () =>
     {
-        expect( getXorUrlsForFiles ).toBeDefined();
+        expect( uploadFilesAndRetrieveXorUrls ).toBeDefined();
     } );
 
 } )

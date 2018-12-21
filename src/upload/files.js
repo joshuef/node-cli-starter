@@ -43,7 +43,7 @@ export const enKlaw = ( dir ) =>
     } )
 }
 
-export const getXorUrlsForFiles = async ( options ) =>
+export const uploadFilesAndRetrieveXorUrls = async ( options ) =>
 {
     if( ! options.srcDir )
     {
