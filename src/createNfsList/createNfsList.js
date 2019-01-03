@@ -51,7 +51,6 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
 
     let rdfObj = await shepherd( ourFilesMap, FilesMap );
 
-
     //yes this is not the most efficient.
     let allItemsArray = Object.keys( data ).map( async ( location ) =>
     {
@@ -61,7 +60,7 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
         const target = data[ location ];
 
         const fileItem = {
-            id :`${ourFilesMap.id}/${location}`,
+            id : `${ourFilesMap.id}/${location}`,
             target
         };
 
@@ -70,42 +69,17 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
         logger.trace( 'validity check outcome or fileItem',valid )
 
         let thisItem = await shepherd( fileItem, FileItem );
-        //
-        // let itemResolver;
-        // let itemTurtle = new Promise( ( resolve, reject ) => {
-        //     itemResolver = resolve;
-        // });
-        //
-        // rdflib.serialize( null,  thisItem, fileItem.id, 'text/turtle', ( err, result ) =>
-        // {
-        //     new Promise( ( resolve, reject ) =>
-        //     {
-        //         if( err )
-        //         {
-        //             logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
-        //             throw new Error( err );
-        //             // reject( err )
-        //         }
-        //         // resolve(result)
-        //         itemResolver(result)
-        //     } );
-        // } );
-        //
-        // itemTurtle = await itemTurtle;
 
         rdfObj.add( thisItem )
-        // return rdflib.parse( itemTurtle, rdfObj, ourFilesMap.id, 'text/turtle' );
-
-
     } )
 
-    // console.log(allItemsArray)
     await Promise.all( allItemsArray );
 
     let fileMapResolver;
-    let fileMapTurtle = new Promise( ( resolve, reject ) => {
+    let fileMapTurtle = new Promise( ( resolve, reject ) => 
+    {
         fileMapResolver = resolve;
-    });
+    } );
 
     // console.log(rdfObj)
     rdflib.serialize( null, rdfObj, ourFilesMap.id, 'text/turtle', ( err, result ) =>
@@ -116,10 +90,9 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
             {
                 logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
                 throw new Error( err );
-                // reject( err )
             }
-            // resolve(result)
-            fileMapResolver(result)
+
+            fileMapResolver( result )
         } );
     } );
 
@@ -129,7 +102,7 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
     console.log( fileMapTurtle )
 
 
-    logger.trace( 'And our data to be saving:', data );
+    // logger.trace( 'And our data to be saving:', data );
 }
 
 export const addNfsListing = async ( md, key, value ) =>
