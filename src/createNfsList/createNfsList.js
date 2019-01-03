@@ -70,31 +70,31 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
         logger.trace( 'validity check outcome or fileItem',valid )
 
         let thisItem = await shepherd( fileItem, FileItem );
+        //
+        // let itemResolver;
+        // let itemTurtle = new Promise( ( resolve, reject ) => {
+        //     itemResolver = resolve;
+        // });
+        //
+        // rdflib.serialize( null,  thisItem, fileItem.id, 'text/turtle', ( err, result ) =>
+        // {
+        //     new Promise( ( resolve, reject ) =>
+        //     {
+        //         if( err )
+        //         {
+        //             logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
+        //             throw new Error( err );
+        //             // reject( err )
+        //         }
+        //         // resolve(result)
+        //         itemResolver(result)
+        //     } );
+        // } );
+        //
+        // itemTurtle = await itemTurtle;
 
-        let itemResolver;
-        let itemTurtle = new Promise( ( resolve, reject ) => {
-            itemResolver = resolve;
-        });
-
-        rdflib.serialize( null,  thisItem, fileItem.id, 'text/turtle', ( err, result ) =>
-        {
-            new Promise( ( resolve, reject ) =>
-            {
-                if( err )
-                {
-                    logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
-                    throw new Error( err );
-                    // reject( err )
-                }
-                // resolve(result)
-                itemResolver(result)
-            } );
-        } );
-
-        itemTurtle = await itemTurtle;
-
-
-        return rdflib.parse( itemTurtle, rdfObj, ourFilesMap.id, 'text/turtle' );
+        rdfObj.add( thisItem )
+        // return rdflib.parse( itemTurtle, rdfObj, ourFilesMap.id, 'text/turtle' );
 
 
     } )
