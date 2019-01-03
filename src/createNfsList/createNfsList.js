@@ -10,9 +10,9 @@ import rdflib from 'rdflib';
 
 
 const fakeDefaultData = {
-    'somefile/path'    : 'safe://1111111',
-    'another/path'     : 'safe://2222222',
-    'another/path/sub' : 'safe://33333'
+    'somefile/path'    : 'safe://somewhereerreee',
+    'another/path'     : 'safe://else',
+    'another/path/sub' : 'safe://again'
 }
 
 logger.warn( `If FilesMap returns undefined, you need ot remember:
@@ -51,22 +51,35 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
 
     let rdfObj = await shepherd( ourFilesMap, FilesMap );
 
+    let fileMapResolver;
+    let fileMapTurtle = new Promise( ( resolve, reject ) => {
+        fileMapResolver = resolve;
+    });
+
     rdflib.serialize( null, rdfObj, ourFilesMap.id, 'text/turtle', ( err, result ) =>
     {
-        if( err )
+        new Promise( ( resolve, reject ) =>
         {
-            logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
-            throw new Error( err );
-        }
-
-        logger.info( 'SERLIALISEDDDDD THE RESOLVEABLEMAPPP' )
-        console.log( result )
+            if( err )
+            {
+                logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
+                throw new Error( err );
+                // reject( err )
+            }
+            // resolve(result)
+            fileMapResolver(result)
+        } );
     } );
+
+    fileMapTurtle = await fileMapTurtle;
+
+    logger.info( 'SERLIALISEDDDDD THE fileMapTurtle RESOLVEABLEMAPPP' )
+    console.log( fileMapTurtle )
 
 
     logger.trace( 'And our data to be saving:', data );
 
-    //yes this is not the most efficient. But for now, stands
+    //yes this is not the most efficient.
     Object.keys( data ).forEach( async ( location ) =>
     {
         console.log( 'location', location )
@@ -78,23 +91,46 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
             id :`${ourFilesMap.id}/${location}`,
             target
         };
-        //safe schema defaultValue...
-        // const result = await man( FileItem );
-        // logger.trace( 'man outcome',result )
+
+
         const valid =  await validate( FileItem, ourFilesMap );
         logger.trace( 'validity check outcome or fileItem',valid )
 
         let thisItem = await shepherd( fileItem, FileItem );
-        rdflib.serialize( null, thisItem, fileItem.id, 'text/turtle', ( err, result ) =>
-        {
-            if( err )
-            {
-                logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
-                throw new Error( err );
-            }
 
-            console.log( 'fileitem', result )
+        let itemResolver;
+        let itemTurtle = new Promise( ( resolve, reject ) => {
+            itemResolver = resolve;
+        });
+
+        rdflib.serialize( null,  thisItem, fileItem.id, 'text/turtle', ( err, result ) =>
+        {
+            new Promise( ( resolve, reject ) =>
+            {
+                if( err )
+                {
+                    logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
+                    throw new Error( err );
+                    // reject( err )
+                }
+                // resolve(result)
+                itemResolver(result)
+            } );
         } );
+
+        itemTurtle = await itemTurtle;
+
+        console.log( 'fileitem', itemTurtle )
+
+        // rdflib.serialize( null, thisItem, fileItem.id, 'text/turtle', ( err, result ) =>
+        // {
+        //     if( err )
+        //     {
+        //         logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
+        //         throw new Error( err );
+        //     }
+        //
+        // } );
     } )
 
 
