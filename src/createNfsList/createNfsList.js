@@ -51,36 +51,9 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
 
     let rdfObj = await shepherd( ourFilesMap, FilesMap );
 
-    let fileMapResolver;
-    let fileMapTurtle = new Promise( ( resolve, reject ) => {
-        fileMapResolver = resolve;
-    });
-
-    rdflib.serialize( null, rdfObj, ourFilesMap.id, 'text/turtle', ( err, result ) =>
-    {
-        new Promise( ( resolve, reject ) =>
-        {
-            if( err )
-            {
-                logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
-                throw new Error( err );
-                // reject( err )
-            }
-            // resolve(result)
-            fileMapResolver(result)
-        } );
-    } );
-
-    fileMapTurtle = await fileMapTurtle;
-
-    logger.info( 'SERLIALISEDDDDD THE fileMapTurtle RESOLVEABLEMAPPP' )
-    console.log( fileMapTurtle )
-
-
-    logger.trace( 'And our data to be saving:', data );
 
     //yes this is not the most efficient.
-    Object.keys( data ).forEach( async ( location ) =>
+    let allItemsArray = Object.keys( data ).map( async ( location ) =>
     {
         console.log( 'location', location )
         console.log( 'xorUrl', data[ location ] )
@@ -120,20 +93,43 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
 
         itemTurtle = await itemTurtle;
 
-        console.log( 'fileitem', itemTurtle )
 
-        // rdflib.serialize( null, thisItem, fileItem.id, 'text/turtle', ( err, result ) =>
-        // {
-        //     if( err )
-        //     {
-        //         logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
-        //         throw new Error( err );
-        //     }
-        //
-        // } );
+        return rdflib.parse( itemTurtle, rdfObj, ourFilesMap.id, 'text/turtle' );
+
+
     } )
 
+    // console.log(allItemsArray)
+    await Promise.all( allItemsArray );
 
+    let fileMapResolver;
+    let fileMapTurtle = new Promise( ( resolve, reject ) => {
+        fileMapResolver = resolve;
+    });
+
+    // console.log(rdfObj)
+    rdflib.serialize( null, rdfObj, ourFilesMap.id, 'text/turtle', ( err, result ) =>
+    {
+        new Promise( ( resolve, reject ) =>
+        {
+            if( err )
+            {
+                logger.error( '!!!!!!!!!!!!!!!!!errorrrr', err )
+                throw new Error( err );
+                // reject( err )
+            }
+            // resolve(result)
+            fileMapResolver(result)
+        } );
+    } );
+
+    fileMapTurtle = await fileMapTurtle;
+
+    logger.info( 'SERLIALISEDDDDD THE fileMapTurtle RESOLVEABLEMAPPP' )
+    console.log( fileMapTurtle )
+
+
+    logger.trace( 'And our data to be saving:', data );
 }
 
 export const addNfsListing = async ( md, key, value ) =>
