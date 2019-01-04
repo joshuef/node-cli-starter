@@ -1,25 +1,27 @@
-import logger from '../logger';
-import { addEntryToMutable, createMutable } from '../safeNetwork';
-
 import { FilesMap, FileItem } from 'safe-schema';
 import { shepherd } from 'semantic-shepherd';
-
 import { resolveableMap, safeId } from 'safe-schema';
 import { man, validate } from 'rdf-check-mate';
 import rdflib from 'rdflib';
 
+import logger from '../logger';
+import {
+    authenticate,
+    addEntryToMutable,
+    commitRdfMdToNetwork,
+    createMutable
+} from '../safeNetwork';
+import { RDF_NFS_TYPE_TAG } from '../constants';
 
-const fakeDefaultData = {
-    'somefile/path'    : 'safe://somewhereerreee',
-    'another/path'     : 'safe://else',
-    'another/path/sub' : 'safe://again'
-}
+
+let app;
+
 
 logger.warn( `If FilesMap returns undefined, you need ot remember:
     right now, we need to build all the RDF deps (and probably link em),
     nothing is published yet! the type of FilesMap is: ${typeof FilesMap}` );
 // const createNfsList = async ( { mdlocationUri = '', pathsCasArray = [], encrypt = false } ) =>
-export const createNfsList = async ( data = fakeDefaultData ) =>
+export const createNfsList = async ( data , targetXorAddress ) =>
 {
     // TODO:
 
@@ -27,18 +29,37 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
     // generate random XOR address for this (or use a target)
     // use RDF consistent typetag
 
-    // Step 2: Create FileItem for each file...
-    // 2.1 Convert entries object to target / date / size....
-    // some info may not be needed as XOU URL has it... (mimetype...?)
+    try
+    {
+        app = await authenticate();
+    }
+    catch( err )
+    {
+        logger.error( ':(', err )
+    }
 
-    // Step 3: Add entry to FilesMap, using KEY as id.
+
+    let ourTargetMD;
+    // If a XOR exists, update. If not. create....
+    if( targetXorAddress )
+    {
+        ourTargetMD = await app.mutableData.newPublic( targetXorAddress, RDF_NFS_TYPE_TAG );
+    }
+    else
+    {
+
+        ourTargetMD = await app.mutableData.newRandomPublic( RDF_NFS_TYPE_TAG );
+        await ourTargetMD.quickSetup({})
+    }
+
+    const safeRDF = ourTargetMD.emulateAs('rdf');
 
 
     // TODO: this needs to have an ID to be passed to RDFMEPLZ
     const ourFilesMap = {
         version : "1",
-        id      : 'safe://asdadsadsa',
-        default : 'safe://asdadsadsa',
+        id      : 'safe://someXORofamap',
+        default : 'safe://someXORofamap',
     };
 
     logger.trace( 'Creationinnnnn NFS', ourFilesMap );
@@ -50,6 +71,8 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
     logger.trace( 'validity check outcome',valid )
 
     let rdfObj = await shepherd( ourFilesMap, FilesMap );
+
+    safeRDF.rdf = rdfObj;
 
     //yes this is not the most efficient.
     let allItemsArray = Object.keys( data ).map( async ( location ) =>
@@ -76,7 +99,7 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
     await Promise.all( allItemsArray );
 
     let fileMapResolver;
-    let fileMapTurtle = new Promise( ( resolve, reject ) => 
+    let fileMapTurtle = new Promise( ( resolve, reject ) =>
     {
         fileMapResolver = resolve;
     } );
@@ -102,6 +125,14 @@ export const createNfsList = async ( data = fakeDefaultData ) =>
     console.log( fileMapTurtle )
 
 
+    const location = await commitRdfMdToNetwork( rdfObj, ourFilesMap.id, ourTargetMD );
+
+
+    logger.info('FINALLY WE HAVE SOMETHING ON THE NETWORKRKRKKRKRKRKRKRKRKRK', location)
+
+
+
+
     // logger.trace( 'And our data to be saving:', data );
 }
 
@@ -116,4 +147,4 @@ export const addNfsListing = async ( md, key, value ) =>
 
 
 
-createNfsList();
+// createNfsList();

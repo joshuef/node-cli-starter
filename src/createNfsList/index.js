@@ -20,6 +20,14 @@ process.on( 'SIGINT', function ()
 let mutableDatum;
 const dataObj = {};
 
+
+//TESTING
+createNfsList( {
+    'somefile/path'    : 'safe://somewhereerreee',
+    'another/path'     : 'safe://else',
+    'another/path/sub' : 'safe://again'
+} );
+
 stdin.on( 'data', async ( chunk ) =>
 {
     const chunkArray =  chunk.split( '\n' ) ;
@@ -51,7 +59,9 @@ stdin.on( 'end', async () =>
 
     // alldata.forEach( d => console.log( d ) )
 
-     await createNfsList( dataObj );
+
+
+    await createNfsList( dataObj );
 
     console.log( '-----------------------------' )
     process.exit();
