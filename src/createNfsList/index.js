@@ -73,7 +73,7 @@ stdin.on( 'end', async () =>
 
     let filesMapUrl = await createNfsList( dataObj );
 
-    console.log( 'WE HAVE IT DONE',filesMapUrl )
+    // console.log( 'WE HAVE IT DONE',filesMapUrl )
     console.log( filesMapUrl )
     process.exit();
 } );
