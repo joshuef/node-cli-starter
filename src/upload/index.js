@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import "core-js/shim";
 import path from 'path';
 import cliOptions from '../cli-options';

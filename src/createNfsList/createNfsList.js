@@ -23,11 +23,12 @@ logger.warn( `If FilesMap returns undefined, you need ot remember:
 // const createNfsList = async ( { mdlocationUri = '', pathsCasArray = [], encrypt = false } ) =>
 export const createNfsList = async ( data , targetXorAddress ) =>
 {
-    // TODO:
-
-    // Step 1: Create FilesMap.
-    // generate random XOR address for this (or use a target)
-    // use RDF consistent typetag
+    logger.info('data', data )
+    if( !data || typeof data !== 'object' )
+    {
+        logger.error('data is not an object', data)
+        // throw new Error( 'Data passed into createNfsList should be an array.')
+    }
 
     try
     {
@@ -43,6 +44,7 @@ export const createNfsList = async ( data , targetXorAddress ) =>
     // If a XOR exists, update. If not. create....
     if( targetXorAddress )
     {
+        throw new Error('no handling for existing MDs at this point')
         ourTargetMD = await app.mutableData.newPublic( targetXorAddress, RDF_NFS_TYPE_TAG );
     }
     else
@@ -122,17 +124,22 @@ export const createNfsList = async ( data , targetXorAddress ) =>
     fileMapTurtle = await fileMapTurtle;
 
     logger.info( 'SERLIALISEDDDDD THE fileMapTurtle RESOLVEABLEMAPPP' )
-    console.log( fileMapTurtle )
+    console.log( 'fulllllllllllllll filemap',fileMapTurtle )
+    let location;
+
+    try{
+
+logger.info(':::::::::::::::::::::::::')
+        location = await commitRdfMdToNetwork( rdfObj, ourFilesMap.id, ourTargetMD );
+    }
+    catch(e)
+    {
+        logger.error('problem with puttting to network', e)
+    }
 
 
-    const location = await commitRdfMdToNetwork( rdfObj, ourFilesMap.id, ourTargetMD );
-
-
-    logger.info('FINALLY WE HAVE SOMETHING ON THE NETWORKRKRKKRKRKRKRKRKRKRK', location)
-
-
-
-
+    logger.info('comitttttteedddddddd')
+    return location.xorUrl;
     // logger.trace( 'And our data to be saving:', data );
 }
 

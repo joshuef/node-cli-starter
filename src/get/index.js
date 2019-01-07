@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import "core-js/shim";
 import logger from '../logger';
 import cliOptions from '../cli-options';

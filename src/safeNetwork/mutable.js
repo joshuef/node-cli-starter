@@ -101,12 +101,15 @@ const RDF_GRAPH_ID = '@id';
 
 const asyncSerialiseToJson = async ( rdf, id ) =>
 {
+    logger.info('async serlialiseesee')
     return new Promise( ( resolve, reject ) =>
     {
         const cb = ( err, parsed ) =>
         {
+            // console.log('async cv', err, parsed)
             if ( err )
             {
+                logger.info('async serlialiseesee cbbcbcbcbcbcb! err', err )
                 return reject( err );
             }
             resolve( parsed );
@@ -127,14 +130,25 @@ const asyncSerialiseToJson = async ( rdf, id ) =>
 */
 export const commitRdfMdToNetwork = async ( rdf, id, md, toEncrypt = false ) =>
 {
+    logger.info('111111111')
     const serialJsonLd = await asyncSerialiseToJson( rdf, id );
+    logger.info('serilasedd', serialJsonLd)
     const graphs = JSON.parse( serialJsonLd );
-
-    // logger.info('111111111', md)
-    const entries = await md.getEntries();
-    // logger.info('2222222222')
-    const entriesList = await entries.listEntries();
     const mutation = await md.app.mutableData.newMutation();
+
+    // TODO: Enable handling of existing MDs.
+    // currently getting entries never returns for new MDs
+    try{
+
+        // const entries = await md.getEntries();
+        // logger.info('2222222222')
+        // const entriesList = await entries.listEntries();
+
+    }
+    catch(e)
+    {
+        console.error('an error in geEntiresss',e)
+    }
     const mData = md;
     const graphPromises = graphs.map( async ( graph ) =>
     {
@@ -146,38 +160,38 @@ export const commitRdfMdToNetwork = async ( rdf, id, md, toEncrypt = false ) =>
         // (before replacing via the rdf graph) this is to be able to remove any
         // remaining entries (not readded via rdf) as they have been
         // removed from this graph.
-        await Promise.all( entriesList.map( async ( entry, i ) =>
-        {
-            if ( !entry || !entry.key || match ) return;
-
-            let keyToCheck = entry.key.toString();
-
-            if ( toEncrypt )
-            {
-                try
-                {
-                    const decryptedKey = await mData.decrypt( entry.key );
-                    keyToCheck = decryptedKey.toString();
-                }
-                catch ( error )
-                {
-                    // if ( error.code !== errConst.ERR_SERIALISING_DESERIALISING.code )
-                    // {
-                    logger.warn( 'we dont have error codes yet, this might be one to ignore if its about deserlialising...' );
-                    logger.error( 'Error decrypting MutableData entry in rdf.commit():', error );
-                    // }
-                    // ok, let's then assume the entry is not encrypted
-                    // this maybe temporary, just for backward compatibility,
-                    // but in the future we should always expect them to be encrpyted
-                }
-            }
-
-            if ( unencryptedKey === keyToCheck )
-            {
-                delete entriesList[i];
-                match = entry;
-            }
-        } ) );
+        // await Promise.all( entriesList.map( async ( entry, i ) =>
+        // {
+        //     if ( !entry || !entry.key || match ) return;
+        //
+        //     let keyToCheck = entry.key.toString();
+        //
+        //     if ( toEncrypt )
+        //     {
+        //         try
+        //         {
+        //             const decryptedKey = await mData.decrypt( entry.key );
+        //             keyToCheck = decryptedKey.toString();
+        //         }
+        //         catch ( error )
+        //         {
+        //             // if ( error.code !== errConst.ERR_SERIALISING_DESERIALISING.code )
+        //             // {
+        //             logger.warn( 'we dont have error codes yet, this might be one to ignore if its about deserlialising...' );
+        //             logger.error( 'Error decrypting MutableData entry in rdf.commit():', error );
+        //             // }
+        //             // ok, let's then assume the entry is not encrypted
+        //             // this maybe temporary, just for backward compatibility,
+        //             // but in the future we should always expect them to be encrpyted
+        //         }
+        //     }
+        //
+        //     if ( unencryptedKey === keyToCheck )
+        //     {
+        //         delete entriesList[i];
+        //         match = entry;
+        //     }
+        // } ) );
 
         let stringifiedGraph = JSON.stringify( graph );
         if ( toEncrypt )
@@ -196,39 +210,39 @@ export const commitRdfMdToNetwork = async ( rdf, id, md, toEncrypt = false ) =>
     await Promise.all( graphPromises );
 
     // remove RDF entries which are not present in new RDF
-    await entriesList.forEach( async ( entry ) =>
-    {
-        if ( entry )
-        {
-            let keyToCheck = entry.key.toString();
-
-            if ( toEncrypt )
-            {
-                try
-                {
-                    const decryptedKey = await mData.decrypt( entry.key );
-                    keyToCheck = decryptedKey.toString();
-                }
-                catch ( error )
-                {
-                    // if ( error.code !== errConst.ERR_SERIALISING_DESERIALISING.code )
-                    // {
-                    logger.warn( 'we dont have error codes yet, this might be one to ignore if its about deserlialising...' );
-
-                    console.warn( 'Error decrypting MutableData entry in rdf.commit():', error );
-                    // }
-                    // ok, let's then assume the entry is not encrypted
-                    // this maybe temporary, just for backward compatibility,
-                    // but in the future we should always expect them to be encrpyted
-                }
-            }
-
-            if ( keyToCheck.startsWith( 'safe://' ) )
-            {
-                await mutation.delete( entry.key, entry.value.version + 1 );
-            }
-        }
-    } );
+    // await entriesList.forEach( async ( entry ) =>
+    // {
+    //     if ( entry )
+    //     {
+    //         let keyToCheck = entry.key.toString();
+    //
+    //         if ( toEncrypt )
+    //         {
+    //             try
+    //             {
+    //                 const decryptedKey = await mData.decrypt( entry.key );
+    //                 keyToCheck = decryptedKey.toString();
+    //             }
+    //             catch ( error )
+    //             {
+    //                 // if ( error.code !== errConst.ERR_SERIALISING_DESERIALISING.code )
+    //                 // {
+    //                 logger.warn( 'we dont have error codes yet, this might be one to ignore if its about deserlialising...' );
+    //
+    //                 console.warn( 'Error decrypting MutableData entry in rdf.commit():', error );
+    //                 // }
+    //                 // ok, let's then assume the entry is not encrypted
+    //                 // this maybe temporary, just for backward compatibility,
+    //                 // but in the future we should always expect them to be encrpyted
+    //             }
+    //         }
+    //
+    //         if ( keyToCheck.startsWith( 'safe://' ) )
+    //         {
+    //             await mutation.delete( entry.key, entry.value.version + 1 );
+    //         }
+    //     }
+    // } );
 
     await md.applyEntriesMutation( mutation );
     const nameAndTag = await md.getNameAndTag();

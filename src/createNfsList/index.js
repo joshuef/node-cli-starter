@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import "core-js/shim";
 import logger from '../logger';
 import cliOptions from '../cli-options';
@@ -20,16 +22,24 @@ process.on( 'SIGINT', function ()
 let mutableDatum;
 const dataObj = {};
 
+//
+// const test = async () =>
+// {
+//     //TESTING
+//     const url = await createNfsList( {
+//         'somefile/path'    : 'safe://somewhereerreee',
+//         'another/path'     : 'safe://else',
+//         'another/path/sub' : 'safe://again'
+//     } );
+//
+//     logger.info('we have a urll:', url)
+// }
 
-//TESTING
-createNfsList( {
-    'somefile/path'    : 'safe://somewhereerreee',
-    'another/path'     : 'safe://else',
-    'another/path/sub' : 'safe://again'
-} );
-
+// test();
 stdin.on( 'data', async ( chunk ) =>
 {
+
+    logger.info('receiving data in createnfs', chunk)
     const chunkArray =  chunk.split( '\n' ) ;
 
     chunkArray.forEach( async d =>
@@ -61,9 +71,10 @@ stdin.on( 'end', async () =>
 
 
 
-    await createNfsList( dataObj );
+    let filesMapUrl = await createNfsList( dataObj );
 
-    console.log( '-----------------------------' )
+    console.log( 'WE HAVE IT DONE',filesMapUrl )
+    console.log( filesMapUrl )
     process.exit();
 } );
 
