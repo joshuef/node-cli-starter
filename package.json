@@ -17,7 +17,8 @@
     "bash-test": "for d in $(seq 1 5); do yarn dry-run -s dist || break; sleep 1; done;",
     "build": "rimraf ./lib && babel src -d lib",
     "dry-run": "NODE_ENV=test babel-node src/upload",
-    "dry-run-built": "yarn build && chmod -R +x ./lib && NODE_ENV=test ./lib/upload/index.js -s dist | NODE_ENV=test ./lib/createNfsList/index.js",
+    "dry-run-built": "yarn build && chmod -R +x ./lib && NODE_ENV=dev ./lib/upload/index.js -s dist | NODE_ENV=dev ./lib/createNfsList/index.js -l",
+    "test-run-built": "yarn build && chmod -R +x ./lib && NODE_ENV=test ./lib/upload/index.js -s dist | NODE_ENV=test ./lib/createNfsList/index.js",
     "createNfsList": "NODE_ENV=test babel-node src/createNfsList",
     "combo": "yarn dry-run || yarn createNfsList",
     "get": "NODE_ENV=test babel-node src/get",
@@ -35,13 +36,14 @@
     "fs-extra": "7.0.0",
     "klaw": "3.0.0",
     "mime-types": "2.1.20",
+    "node-ipc": "9.1.1",
     "palin": "2.2.0",
+    "rdf-check-mate": "https://github.com/joshuef/rdf-check-mate",
     "rdflib": "0.19.0",
-    "safe-schema" : "https://github.com/joshuef/sschema",
-    "semantic-shepherd" : "https://github.com/joshuef/semantic-shepherd",
-    "rdf-check-mate" : "https://github.com/joshuef/rdf-check-mate",
     "request": "2.88.0",
-    "request-promise-native": "1.0.5"
+    "request-promise-native": "1.0.5",
+    "safe-schema": "https://github.com/joshuef/sschema",
+    "semantic-shepherd": "https://github.com/joshuef/semantic-shepherd"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
@@ -59,6 +61,6 @@
     "eslint-plugin-jest": "21.22.0",
     "eslint-plugin-promise": "4.0.0",
     "jest": "23.5.0",
-    "rimraf": "2.6.2"
+    "rimraf": "2.6.3"
   }
 }

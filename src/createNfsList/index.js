@@ -53,11 +53,6 @@ stdin.on( 'data', async ( chunk ) =>
 
         dataObj[path] = uri;
 
-        // if one doesnt exist.... how do we check that? with --target ops?
-        // mutableDatum = mutableDatum || await createNfsList( );
-
-        // data.push( addNfsListing( mutableDatum, path, uri ) );
-
     } );
 
 } );
@@ -65,31 +60,9 @@ stdin.on( 'data', async ( chunk ) =>
 stdin.on( 'end', async () =>
 {
 
-    // let alldata = await Promise.all( data )
-
-    // alldata.forEach( d => console.log( d ) )
-
-
 
     let filesMapUrl = await createNfsList( dataObj );
 
-    // console.log( 'WE HAVE IT DONE',filesMapUrl )
     console.log( filesMapUrl )
     process.exit();
 } );
-
-
-// TODO: check if piping or no... (via args?)
-// TODO: check if processing or no... (via args?)
-
-// self executing cli func
-// ( async () =>
-// {
-//     logger.info( 's-createNfsList starting' );
-//
-//     // if( cliOptions. )
-//     // await createNfsList( cliOptions.get );
-//
-//     // dont auth exit as we may be piping.
-//     // process.exit();
-// } )()

@@ -57,7 +57,7 @@ export const handleFileUpload = async ( app, theFilePath, networkPath ) =>
     }
     catch( err )
     {
-        logger.error( 'ummm',err );
+        // logger.error( 'FileUploader problems' );
 
         throw err;
     }

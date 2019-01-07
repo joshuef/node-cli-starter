@@ -30,14 +30,14 @@ export const createNfsList = async ( data , targetXorAddress ) =>
         // throw new Error( 'Data passed into createNfsList should be an array.')
     }
 
-    try
-    {
-        app = await authenticate();
-    }
-    catch( err )
-    {
-        logger.error( ':(', err )
-    }
+    // try
+    // {
+    app = await authenticate();
+    // }
+    // catch( err )
+    // {
+    //     logger.error( ':(', err )
+    // }
 
 
     let ourTargetMD;
