@@ -23,10 +23,10 @@ logger.warn( `If FilesMap returns undefined, you need ot remember:
 // const createNfsList = async ( { mdlocationUri = '', pathsCasArray = [], encrypt = false } ) =>
 export const createNfsList = async ( data , targetXorAddress ) =>
 {
-    logger.info('data', data )
+    logger.info( 'data', data )
     if( !data || typeof data !== 'object' )
     {
-        logger.error('data is not an object', data)
+        logger.error( 'data is not an object', data )
         // throw new Error( 'Data passed into createNfsList should be an array.')
     }
 
@@ -44,17 +44,17 @@ export const createNfsList = async ( data , targetXorAddress ) =>
     // If a XOR exists, update. If not. create....
     if( targetXorAddress )
     {
-        throw new Error('no handling for existing MDs at this point')
+        throw new Error( 'no handling for existing MDs at this point' )
         ourTargetMD = await app.mutableData.newPublic( targetXorAddress, RDF_NFS_TYPE_TAG );
     }
     else
     {
 
         ourTargetMD = await app.mutableData.newRandomPublic( RDF_NFS_TYPE_TAG );
-        await ourTargetMD.quickSetup({})
+        await ourTargetMD.quickSetup( {} )
     }
 
-    const safeRDF = ourTargetMD.emulateAs('rdf');
+    const safeRDF = ourTargetMD.emulateAs( 'rdf' );
 
 
     // TODO: this needs to have an ID to be passed to RDFMEPLZ
@@ -127,18 +127,19 @@ export const createNfsList = async ( data , targetXorAddress ) =>
     console.log( 'fulllllllllllllll filemap',fileMapTurtle )
     let location;
 
-    try{
+    try
+    {
 
-logger.info(':::::::::::::::::::::::::')
+        logger.info( ':::::::::::::::::::::::::' )
         location = await commitRdfMdToNetwork( rdfObj, ourFilesMap.id, ourTargetMD );
     }
-    catch(e)
+    catch( e )
     {
-        logger.error('problem with puttting to network', e)
+        logger.error( 'problem with puttting to network', e )
     }
 
 
-    logger.info('comitttttteedddddddd')
+    logger.info( 'comitttttteedddddddd' )
     return location.xorUrl;
     // logger.trace( 'And our data to be saving:', data );
 }

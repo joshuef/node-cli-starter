@@ -31,6 +31,6 @@ export const delay = time => new Promise( resolve => setTimeout( resolve, time )
 
     logger.info( 'root of all safe' , pid, response  );
 
-    await delay(1000)
+    await delay( 1000 )
     process.exit();
 } )()

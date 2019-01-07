@@ -25,7 +25,7 @@ const authenticate = async ( ) =>
         if( process.env.NODE_ENV === 'test' )
         {
             app = await initialiseApp( appInfo, null, {
-                forceUseMock: true,
+                forceUseMock           : true,
                 // registerScheme : true,
                 enableExperimentalApis : true
             } );
@@ -35,16 +35,16 @@ const authenticate = async ( ) =>
         else
         {
             const env = process.env.NODE_ENV;
-            const useMock = /dev/.test(env);
-            logger.info('usemock', useMock);
+            const useMock = /dev/.test( env );
+            logger.info( 'usemock', useMock );
             const appInitOptions = {
-                forceUseMock: useMock,
+                forceUseMock           : useMock,
                 // registerScheme : true,
                 enableExperimentalApis : true
             }
             const containerOptions = null;
             app = await bootstrap( appInfo, publicNamesContainerPerms, containerOptions, appInitOptions )
-            logger.info('Registered Scheme>>>>>>>>>>>>>>>>>>>>', app.auth.registeredScheme )
+            logger.info( 'Registered Scheme>>>>>>>>>>>>>>>>>>>>', app.auth.registeredScheme )
             // console.warn( 'Nothing has been set up with attempting to auth. Use NODE_ENV=test')
             // TODO: STUFF
             // const authUri = await app.auth.genAuthUri( publicNamesContainerPerms );

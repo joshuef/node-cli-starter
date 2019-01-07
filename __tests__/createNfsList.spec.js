@@ -1,6 +1,6 @@
 import { createNfsList } from '../src/createNfsList/createNfsList';
 
-jest.unmock('solid-auth-client')
+jest.unmock( 'solid-auth-client' )
 describe( 'createNfsList', () =>
 {
     it( 'should exist', () =>
@@ -21,7 +21,7 @@ describe( 'createNfsList', () =>
         // logger.info('we have a urll:', url)
 
         expect( url ).toBeDefined();
-        expect( url ).toMatch('ssss');
+        expect( url ).toMatch( 'ssss' );
     } );
 
 } )

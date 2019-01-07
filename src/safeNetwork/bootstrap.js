@@ -105,9 +105,9 @@ export const bootstrap = async ( appInfo, appContainers, containerOpts, appInitO
     // }
     // else
     // {
-        await authorise( process.pid, appInfo, appContainers, containerOpts, options )
-        logger.info( 'ipcReceive(' + process.pid + ')' )
-        uri = await ipcReceive( String( process.pid ) )
+    await authorise( process.pid, appInfo, appContainers, containerOpts, options )
+    logger.info( 'ipcReceive(' + process.pid + ')' )
+    uri = await ipcReceive( String( process.pid ) )
     // }
 
     // TODO revert to safe-node-app v0.9.1: call fromAuthUri() instead of fromAuthURI()
@@ -126,7 +126,7 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
             '--response'
         ]
 
-        logger.info('setting custom exec path:', appInfo.customExecPath )
+        logger.info( 'setting custom exec path:', appInfo.customExecPath )
     }
     logger.info( 'call Safe.initializeApp()...' )
     // TODO revert to safe-node-app v0.9.1: call initialiseApp() instead of initializeApp()
@@ -189,7 +189,7 @@ export const ipcSend = async ( id, data ) =>
 function getLibPath ()
 {
     const roots = [
-        path.join( __dirname, '../..'),
+        path.join( __dirname, '../..' ),
         // path.dirname( process.argv[1] )
     ]
 

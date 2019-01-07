@@ -101,7 +101,7 @@ const RDF_GRAPH_ID = '@id';
 
 const asyncSerialiseToJson = async ( rdf, id ) =>
 {
-    logger.info('async serlialiseesee')
+    logger.info( 'async serlialiseesee' )
     return new Promise( ( resolve, reject ) =>
     {
         const cb = ( err, parsed ) =>
@@ -109,7 +109,7 @@ const asyncSerialiseToJson = async ( rdf, id ) =>
             // console.log('async cv', err, parsed)
             if ( err )
             {
-                logger.info('async serlialiseesee cbbcbcbcbcbcb! err', err )
+                logger.info( 'async serlialiseesee cbbcbcbcbcbcb! err', err )
                 return reject( err );
             }
             resolve( parsed );
@@ -130,24 +130,25 @@ const asyncSerialiseToJson = async ( rdf, id ) =>
 */
 export const commitRdfMdToNetwork = async ( rdf, id, md, toEncrypt = false ) =>
 {
-    logger.info('111111111')
+    logger.info( '111111111' )
     const serialJsonLd = await asyncSerialiseToJson( rdf, id );
-    logger.info('serilasedd', serialJsonLd)
+    logger.info( 'serilasedd', serialJsonLd )
     const graphs = JSON.parse( serialJsonLd );
     const mutation = await md.app.mutableData.newMutation();
 
     // TODO: Enable handling of existing MDs.
     // currently getting entries never returns for new MDs
-    try{
+    try
+    {
 
         // const entries = await md.getEntries();
         // logger.info('2222222222')
         // const entriesList = await entries.listEntries();
 
     }
-    catch(e)
+    catch( e )
     {
-        console.error('an error in geEntiresss',e)
+        console.error( 'an error in geEntiresss',e )
     }
     const mData = md;
     const graphPromises = graphs.map( async ( graph ) =>

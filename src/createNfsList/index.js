@@ -39,7 +39,7 @@ const dataObj = {};
 stdin.on( 'data', async ( chunk ) =>
 {
 
-    logger.info('receiving data in createnfs', chunk)
+    logger.info( 'receiving data in createnfs', chunk )
     const chunkArray =  chunk.split( '\n' ) ;
 
     chunkArray.forEach( async d =>
