@@ -106,8 +106,10 @@ export const bootstrap = async ( appInfo, appContainers, containerOpts, appInitO
     // else
     // {
     await authorise( process.pid, appInfo, appContainers, containerOpts, options )
-    logger.info( 'ipcReceive(' + process.pid + ')' )
-    uri = await ipcReceive( String( process.pid ) )
+    logger.info( 'ipcReceive awaiting...(' + process.pid + ')' )
+    let uri = await ipcReceive( String( process.pid ) )
+
+    logger.info('ipcReveiddededddd!!!!!!!', uri)
     // }
 
     // TODO revert to safe-node-app v0.9.1: call fromAuthUri() instead of fromAuthURI()
@@ -140,9 +142,9 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
     logger.info( 'wait a mo' )
 }
 
-async function ipcReceive ( id )
+const ipcReceive = async ( id ) =>
 {
-    logger.info( 'ipcReceive(' + id + ')' )
+    logger.info( 'ipcReceive setup....(' + id + ')' )
     return new Promise( ( resolve ) =>
     {
         ipc.config.id = id

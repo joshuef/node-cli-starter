@@ -3,10 +3,10 @@ import logger from '../logger';
 import { bootstrap } from './bootstrap';
 
 const appInfo = {
-    id           : 'net.maidsafe.test.javascript.id',
-    name         : 'NodeJS CLI Uploader Test',
-    vendor       : 'MaidSafe.net Ltd',
-    forceUseMock : true
+    id     : 'net.maidsafe.test.javascript.id',
+    name   : 'NodeJS CLI Uploader Test',
+    vendor : 'MaidSafe.net Ltd',
+    // forceUseMock : true
 };
 
 
@@ -39,7 +39,7 @@ const authenticate = async ( ) =>
             logger.info( 'usemock', useMock );
             const appInitOptions = {
                 forceUseMock           : useMock,
-                // registerScheme : true,
+                registerScheme         : true,
                 enableExperimentalApis : true
             }
             const containerOptions = null;
