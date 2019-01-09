@@ -28,6 +28,11 @@ log.addTarget( 'file', { file: path.resolve( process.cwd(), logFileName )} )
     .withLowestSeverity( 'debug' )
     .withHighestSeverity( 'error' );
 
+log.addTarget( 'file', { file: path.resolve( __dirname, '..', logFileName )} )
+    .withFormatter('human')
+    .withLowestSeverity( 'debug' )
+    .withHighestSeverity( 'error' );
+
 log.addTarget( 'console' ).withFormatter( palin,
     {
         //shorten log output to contents of this folder.

@@ -3,7 +3,7 @@ import logger from '../logger';
 import { bootstrap } from './bootstrap';
 
 const appInfo = {
-    id     : 'net.maidsafe.test.javascript.id',
+    id     : 'net.maidsafe.cli.javascript.id',
     name   : 'NodeJS CLI Uploader Test',
     vendor : 'MaidSafe.net Ltd',
     // forceUseMock : true

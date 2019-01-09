@@ -109,7 +109,7 @@ export const bootstrap = async ( appInfo, appContainers, containerOpts, appInitO
     logger.info( 'ipcReceive awaiting...(' + process.pid + ')' )
     let uri = await ipcReceive( String( process.pid ) )
 
-    logger.info('ipcReveiddededddd!!!!!!!', uri)
+    logger.info( 'ipcReveiddededddd!!!!!!!', uri )
     // }
 
     // TODO revert to safe-node-app v0.9.1: call fromAuthUri() instead of fromAuthURI()
@@ -124,17 +124,63 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
     {
         appInfo.customExecPath = [
             path.resolve( __dirname, '..', 'index.js' ),
-            '--pid', String( pid ),
+            '--pid',
+            String( pid ),
             '--response'
-        ]
+        ];
+
+        const platform = process.platform;
+
+        // we use a special app to send on the args, as we can't register a scheme to just the script.
+        if( platform === 'darwin' )
+        {
+            appInfo.customExecPath = [
+                path.resolve( __dirname, '..', '..', 'KnockOn.app' ),
+                '--args', //for osx to pass on...
+                '--pid',
+                String( pid ),
+                '--response'
+            ]
+
+            appInfo.bundle = 'com.maidsafe.knock-on';
+        }
 
         logger.info( 'setting custom exec path:', appInfo.customExecPath )
     }
     logger.info( 'call Safe.initializeApp()...' )
+
+    // TODO: sort the bundle name
+
+
     // TODO revert to safe-node-app v0.9.1: call initialiseApp() instead of initializeApp()
-    const app = await initialiseApp( appInfo, undefined, options )
+    const app = await initialiseApp( appInfo, undefined, options );
+    const registeredScheme = app.auth.registeredAppScheme;
+
+    const knockOnPlistLocation = path.resolve( __dirname, '../../KnockOn.app/Contents/Info.plist' );
+
+
+
     logger.info( 'call app.auth.genAuthUri()...' )
     const uri = await app.auth.genAuthUri( appContainers, containerOpts )
+
+
+    logger.info( 'scheme we registered:', registeredScheme )
+    logger.info( 'Your plist please....', knockOnPlistLocation )
+    fs.readFile( knockOnPlistLocation, 'utf8', function ( err,data )
+    {
+        if ( err )
+        {
+            return console.log( err );
+        }
+
+        var result = data.replace( /safe-xxx/g, registeredScheme );
+
+        fs.writeFile( knockOnPlistLocation, result, 'utf8', function ( err )
+        {
+            logger.info('plist updated')
+            if ( err ) return console.log( err );
+        } );
+    } );
 
     logger.info( 'bootstrap.authorise() with appInfo: ' + JSON.stringify( appInfo ) +
     'appContainers: ' + JSON.stringify( appContainers ) )

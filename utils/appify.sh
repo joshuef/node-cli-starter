@@ -102,6 +102,8 @@ cat <<EOF > "$APPDIR/Info.plist"
     <string>$APPNAME</string>
     <key>CFBundleGetInfoString</key>
     <string>$APPNAME</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.maidsafe.knock-on</string>
     <key>CFBundleIconFile</key>
     <string>$APPNAME</string>
     <key>CFBundleName</key>
@@ -110,6 +112,12 @@ cat <<EOF > "$APPDIR/Info.plist"
     <string>APPL</string>
     <key>CFBundleSignature</key>
     <string>4242</string>
+    <key>CFBundleURLName</key>
+       <string>Safe App Auth Receiver</string>
+       <key>CFBundleURLSchemes</key>
+       <array>
+           <string>safe-xxx</string>
+       </array>
   </dict>
 </plist>
 EOF

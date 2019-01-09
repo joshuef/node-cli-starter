@@ -12,6 +12,8 @@ export const delay = time => new Promise( resolve => setTimeout( resolve, time )
 
 ( async () =>
 {
+    // logger.warn('all things passed in', cliOptions)
+    logger.warn('all things passed in argv', process.argv)
     const response = cliOptions.response;
     const pid = cliOptions.pid;
 
@@ -26,11 +28,11 @@ export const delay = time => new Promise( resolve => setTimeout( resolve, time )
     }
 
 
-    logger.info( 'ipcSend(' + cliOptions.pid + ',' + cliOptions.response + ')' )
+    logger.warn( 'ipcSend(' + cliOptions.pid + ',' + cliOptions.response + ')' )
     await ipcSend( String( cliOptions.pid ), cliOptions.response )
 
-    logger.info( 'root of all safe' , pid, response  );
+    logger.warn( 'root of all safe' , pid, response  );
 
-    await delay( 1000 )
+    await delay(1000)
     process.exit();
 } )()
