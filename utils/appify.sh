@@ -112,12 +112,17 @@ cat <<EOF > "$APPDIR/Info.plist"
     <string>APPL</string>
     <key>CFBundleSignature</key>
     <string>4242</string>
-    <key>CFBundleURLName</key>
-       <string>Safe App Auth Receiver</string>
-       <key>CFBundleURLSchemes</key>
-       <array>
-           <string>safe-xxx</string>
-       </array>
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleURLName</key>
+        <string>SAFE Network Response URL</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>safe-xxx</string>
+        </array>
+      </dict>
+    </array>
   </dict>
 </plist>
 EOF

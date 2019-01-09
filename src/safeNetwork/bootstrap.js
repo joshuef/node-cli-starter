@@ -135,7 +135,7 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
         if( platform === 'darwin' )
         {
             appInfo.customExecPath = [
-                path.resolve( __dirname, '..', '..', 'KnockOn.app' ),
+                path.resolve( __dirname, '..', '..', 'KnockOn.app/Contents/MacOS/KnockOn' ),
                 '--args', //for osx to pass on...
                 '--pid',
                 String( pid ),
@@ -149,7 +149,7 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
     }
     logger.info( 'call Safe.initializeApp()...' )
 
-    // TODO: sort the bundle name
+    // TODO: trying js app instead of bash
 
 
     // TODO revert to safe-node-app v0.9.1: call initialiseApp() instead of initializeApp()
