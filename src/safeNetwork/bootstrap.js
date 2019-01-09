@@ -37,6 +37,7 @@ import path from 'path';
 import ipc from 'node-ipc';
 import { initialiseApp } from '@maidsafe/safe-node-app';
 import cliOptions from '../cli-options';
+import {PID_LOCATION} from '../constants';
 
 import logger from '../logger';
 // const debug = require('debug')('safenetworkjs:cli')
@@ -135,12 +136,18 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
         if( platform === 'darwin' )
         {
             appInfo.customExecPath = [
-                path.resolve( __dirname, '..', '..', 'KnockOn.app/Contents/MacOS/KnockOn' ),
-                '--args', //for osx to pass on...
-                '--pid',
-                String( pid ),
-                '--response'
-            ]
+                path.resolve( __dirname, '..', '..', 'url-helper.app' ),
+                // '--args', //for osx to pass on...
+                // '--pid',
+                // String( pid ),
+                // '--response'
+            ];
+
+            fs.writeFile( PID_LOCATION, String( pid ), 'utf8', function ( err )
+            {
+                logger.info('pid written ')
+                if ( err ) return console.log( err );
+            } );
 
             appInfo.bundle = 'com.maidsafe.knock-on';
         }
@@ -156,7 +163,8 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
     const app = await initialiseApp( appInfo, undefined, options );
     const registeredScheme = app.auth.registeredAppScheme;
 
-    const knockOnPlistLocation = path.resolve( __dirname, '../../KnockOn.app/Contents/Info.plist' );
+    const knockOnPlistLocation = path.resolve( __dirname, '../../url-helper.app/Contents/Info.plist' );
+    // const knockOnPlistLocation = path.resolve( __dirname, '../../KnockOn.app/Contents/Info.plist' );
 
 
 
