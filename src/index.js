@@ -14,7 +14,7 @@ export const delay = time => new Promise( resolve => setTimeout( resolve, time )
 ( async () =>
 {
     // logger.warn('all things passed in', cliOptions)
-    logger.warn('all things passed in argv', process.argv)
+    // logger.warn('all things passed in argv', process.argv)
     const response = cliOptions.response;
 
     const pid = fs.readFileSync( PID_LOCATION, 'utf8' );
@@ -34,8 +34,8 @@ export const delay = time => new Promise( resolve => setTimeout( resolve, time )
     }
 
 
-    logger.warn( 'ipcSend(' + cliOptions.pid + ',' + cliOptions.response + ')' )
-    await ipcSend( String( cliOptions.pid ), cliOptions.response )
+    logger.warn( 'ipcSend(' + pid + ',' + cliOptions.response + ')' )
+    await ipcSend( String( pid ), cliOptions.response )
 
     logger.warn( 'root of all safe' , pid, response  );
 

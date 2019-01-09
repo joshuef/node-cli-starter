@@ -35,7 +35,7 @@ SOFTWARE. */
 import fs from 'fs';
 import path from 'path';
 import ipc from 'node-ipc';
-import { initialiseApp } from '@maidsafe/safe-node-app';
+import { initialiseApp, fromAuthUri } from '@maidsafe/safe-node-app';
 import cliOptions from '../cli-options';
 import {PID_LOCATION} from '../constants';
 
@@ -114,7 +114,7 @@ export const bootstrap = async ( appInfo, appContainers, containerOpts, appInitO
     // }
 
     // TODO revert to safe-node-app v0.9.1: call fromAuthUri() instead of fromAuthURI()
-    return fromAuthURI( appInfo, uri, null, options )
+    return fromAuthUri( appInfo, uri, null, options )
 }
 
 async function authorise ( pid, appInfo, appContainers, containerOpts, options )
