@@ -11,6 +11,16 @@ A simple, opinionated setup for node CLIs.
 
 `yarn`.
 
+
+## OSX Helper app.
+
+In order to receive the url param on OSX, after registering the CLI app the `url-helper.app` is needed to receive these native OSX events.
+
+It's a simple applescript (can be viewed via the applescript editor), which passes the params onto the compiled `lib/index.js` for handling.
+
+
+## TODO
+
 In project you'll need to edit:
 
 - Package.json
