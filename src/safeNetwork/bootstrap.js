@@ -97,7 +97,7 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
         if( platform === 'darwin' )
         {
             appInfo.customExecPath = [
-                path.resolve( __dirname, '..', 'url-helper.app' )
+                path.resolve( __dirname, '../../utils', 'url-helper.app' )
             ];
 
             fs.writeFile( PID_LOCATION, String( pid ), 'utf8', function ( err )
@@ -117,7 +117,7 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
     const app = await initialiseApp( appInfo, undefined, options );
     const registeredScheme = app.auth.registeredAppScheme;
 
-    const urlHelperPlistLocation = path.resolve( __dirname, '../url-helper.app/Contents/Info.plist' );
+    const urlHelperPlistLocation = path.resolve( __dirname, '../../utils/url-helper.app/Contents/Info.plist' );
 
     logger.info( 'call app.auth.genAuthUri()...' )
     const uri = await app.auth.genAuthUri( appContainers, containerOpts )
@@ -132,8 +132,9 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
             return console.log( err );
         }
 
-        const regex = new RegExp( PLACEHOLDER_SCHEME, 'g');
-        const result = data.replace( regex, registeredScheme );
+        // <string>safe-xxx</string>
+        const regex = new RegExp( `<string>${PLACEHOLDER_SCHEME}[A-Za-z0-9]+</string>`, 'g');
+        const result = data.replace( regex, `<string>${registeredScheme}</string>` );
 
         fs.writeFile( urlHelperPlistLocation, result, 'utf8', function ( err )
         {
