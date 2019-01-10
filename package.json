@@ -15,7 +15,7 @@
   },
   "scripts": {
     "bash-test": "for d in $(seq 1 5); do yarn dry-run -s dist || break; sleep 1; done;",
-    "build": "rimraf ./lib && babel src -d lib && cp-cli ./utils/url-helper.app ./lib",
+    "build": "rimraf ./lib && babel src -d lib && cp-cli ./utils/url-helper.app ./lib/url-helper.app",
     "dry-run": "cross-env NODE_ENV=test babel-node src/upload",
     "dry-run-built": "yarn build && chmod -R +x ./lib && NODE_ENV=dev ./lib/upload/index.js -s dist | NODE_ENV=dev ./lib/createNfsList/index.js -l",
     "test-run-built": "yarn build && chmod -R +x ./lib && NODE_ENV=test ./lib/upload/index.js -s dist | NODE_ENV=test ./lib/createNfsList/index.js -l",

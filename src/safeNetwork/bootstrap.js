@@ -1,7 +1,7 @@
 /*
 MIT License
 
-APPLICABLE TO THIS FILE ONLY: safe-app-cli.js which is adapted from
+APPLICABLE TO THIS FILE ONLY: cli bootstrap is adapted from safe-app-cli.js which is adapted from
 https://github.com/project-decorum/decorum-lib/src/Safe.ts
 commit: 1d08f743e60c7953169290abaa37179de3508862
 
@@ -37,48 +37,28 @@ import path from 'path';
 import ipc from 'node-ipc';
 import { initialiseApp, fromAuthUri } from '@maidsafe/safe-node-app';
 import cliOptions from '../cli-options';
-import {PID_LOCATION} from '../constants';
+import {
+    PID_LOCATION,
+    PLACEHOLDER_SCHEME
+} from '../constants';
 
 import logger from '../logger';
-// const debug = require('debug')('safenetworkjs:cli')
-// const fs = require( 'fs' )
-// const ipc = require( 'node-ipc' )
-// const path = require( 'path' )
-// const Safe = require( '@maidsafe/safe-node-app' )
-
-/* console to file
-// process.__defineGetter__('stderr', function () { return fs.createWriteStream(path.join(__dirname, '/pid-' + process.pid + '-error.log'), {flags: 'a'}) })
-// process.__defineGetter__('stdout', function () { return fs.createWriteStream(path.join(__dirname, '/pid-' + process.pid + '-debug'), {flags: 'a'}) })
-
-// var fs = require('fs')
-var util = require('util')
-var logFile = fs.createWriteStream(path.join('/home/mrh/src/fuse/safenetwork-fuse/pid-' + process.pid + '-debug'), {flags: 'w'})
-var logStdout = process.stdout
-
-debug = function (d) {
-  logFile.write(util.format(d) + '\n')
-  logStdout.write(util.format(d) + '\n')
-}
-*/
-
-// No stdout from node-ipc
-// ipc.config.silent = true
 
 // Request permissions on a shared MD
 const fromUri = async ( app, uri ) =>
 {
-    await app.auth.openUri( uri )
+    await app.auth.openUri( uri );
 
-    const uri2 = await ipcReceive( String( process.pid ) )
+    const uri2 = await ipcReceive( String( process.pid ) );
 
-    return app.auth.loginFromURI( uri2 ) // TODO change to loginFromUri for v0.9.1
+    return app.auth.loginFromURI( uri2 );
 }
 
 // Request authorisation
 export const bootstrap = async ( appInfo, appContainers, containerOpts, appInitOptions ) =>
 {
-    logger.info( '__dirname: ' + String( __dirname ) )
-    logger.info( '\nSafe.bootstrap()\n  with appInfo: ' + JSON.stringify( appInfo ) +
+    logger.trace( '__dirname: ' + String( __dirname ) )
+    logger.trace( '\nSafe.bootstrap()\n  with appInfo: ' + JSON.stringify( appInfo ) +
     '  appInitOptions: ' + JSON.stringify( appInitOptions ) )
 
     const options = {
@@ -86,32 +66,13 @@ export const bootstrap = async ( appInfo, appContainers, containerOpts, appInitO
         ...appInitOptions
     }
 
-    // if ( cliOptions.pid !== undefined )
-    // {
-    //     if ( cliOptions.response === undefined )
-    //     {
-    //         throw Error( '--uri undefined' )
-    //     }
-    //
-    //     logger.info( 'ipcSend(' + cliOptions.pid + ',' + cliOptions.response + ')' )
-    //     await ipcSend( String( cliOptions.pid ), cliOptions.response )
-    //
-    //     process.exit()
-    // }
-
-    // let uri
-    // if ( cliOptions.response !== undefined )
-    // {
-    //     uri = cliOptions.response
-    // }
-    // else
-    // {
     await authorise( process.pid, appInfo, appContainers, containerOpts, options )
-    logger.info( 'ipcReceive awaiting...(' + process.pid + ')' )
+
+    logger.trace( 'ipcReceive awaiting...(' + process.pid + ')' )
+
     let uri = await ipcReceive( String( process.pid ) )
 
-    logger.info( 'ipcReveiddededddd!!!!!!!', uri )
-    // }
+    logger.trace( 'ipcReveiddededddd!!!!!!!', uri )
 
     // TODO revert to safe-node-app v0.9.1: call fromAuthUri() instead of fromAuthURI()
     return fromAuthUri( appInfo, uri, null, options )
@@ -136,11 +97,7 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
         if( platform === 'darwin' )
         {
             appInfo.customExecPath = [
-                path.resolve( __dirname, '..', '..', 'url-helper.app' ),
-                // '--args', //for osx to pass on...
-                // '--pid',
-                // String( pid ),
-                // '--response'
+                path.resolve( __dirname, '..', 'url-helper.app' )
             ];
 
             fs.writeFile( PID_LOCATION, String( pid ), 'utf8', function ( err )
@@ -154,46 +111,41 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
 
         logger.info( 'setting custom exec path:', appInfo.customExecPath )
     }
+
     logger.info( 'call Safe.initializeApp()...' )
 
-    // TODO: trying js app instead of bash
-
-
-    // TODO revert to safe-node-app v0.9.1: call initialiseApp() instead of initializeApp()
     const app = await initialiseApp( appInfo, undefined, options );
     const registeredScheme = app.auth.registeredAppScheme;
 
-    const knockOnPlistLocation = path.resolve( __dirname, '../../url-helper.app/Contents/Info.plist' );
-    // const knockOnPlistLocation = path.resolve( __dirname, '../../KnockOn.app/Contents/Info.plist' );
-
-
+    const urlHelperPlistLocation = path.resolve( __dirname, '../url-helper.app/Contents/Info.plist' );
 
     logger.info( 'call app.auth.genAuthUri()...' )
     const uri = await app.auth.genAuthUri( appContainers, containerOpts )
 
 
     logger.info( 'scheme we registered:', registeredScheme )
-    logger.info( 'Your plist please....', knockOnPlistLocation )
-    fs.readFile( knockOnPlistLocation, 'utf8', function ( err,data )
+    logger.info( 'Your plist please....', urlHelperPlistLocation )
+    fs.readFile( urlHelperPlistLocation, 'utf8', function ( err,data )
     {
         if ( err )
         {
             return console.log( err );
         }
 
-        var result = data.replace( /safe-xxx/g, registeredScheme );
+        const regex = new RegExp( PLACEHOLDER_SCHEME, 'g');
+        const result = data.replace( regex, registeredScheme );
 
-        fs.writeFile( knockOnPlistLocation, result, 'utf8', function ( err )
+        fs.writeFile( urlHelperPlistLocation, result, 'utf8', function ( err )
         {
-            logger.info('plist updated')
+            logger.info( 'plist updated');
             if ( err ) return console.log( err );
         } );
     } );
 
     logger.info( 'bootstrap.authorise() with appInfo: ' + JSON.stringify( appInfo ) +
     'appContainers: ' + JSON.stringify( appContainers ) )
+
     await app.auth.openUri( uri.uri )
-    logger.info( 'wait a mo' )
 }
 
 const ipcReceive = async ( id ) =>
