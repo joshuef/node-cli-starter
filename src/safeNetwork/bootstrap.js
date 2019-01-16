@@ -106,7 +106,7 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
                 if ( err ) return console.log( err );
             } );
 
-            appInfo.bundle = 'com.maidsafe.knock-on';
+            appInfo.bundle = 'com.maidsafe.url-helper';
         }
 
         logger.info( 'setting custom exec path:', appInfo, options )
