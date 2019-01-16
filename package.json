@@ -24,7 +24,7 @@
     "get": "cross-env NODE_ENV=test babel-node src/get",
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
     "lint-fix": "yarn run lint --fix",
-    "prepush": "yarn lint && yarn test",
+    "prepush": "yarn lint",
     "start": "babel-node src/upload",
     "test": "jest --maxWorkers=1",
     "bump": "standard-version"
