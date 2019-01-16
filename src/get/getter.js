@@ -5,9 +5,12 @@ export const get = async ( uri ) =>
 {
     try
     {
+        logger.trace('Attempting to GET ', uri)
         let app = await authenticate();
         const data = await app.webFetch( uri );
         logger.info( 'data received:' , data.body.toString() )
+
+        return data;
     }
     catch( err )
     {

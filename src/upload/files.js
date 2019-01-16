@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import klaw from 'klaw';
 import logger from '../logger';
 import { authenticate } from '../safeNetwork';
-import { handleFileUpload } from './fileUploader';
+import { handleFileUpload } from './handleFileUpload';
 
 
 
@@ -70,13 +70,13 @@ export const uploadFilesAndRetrieveXorUrls = async ( options ) =>
 
         await Promise.all( res );
 
-        logger.info( 'all handleFileUploading done, supposeduly' )
+        logger.info( 'all handleFileUploading done, supposedly' )
 
     }
     catch( err )
     {
         logger.error( ':(', err )
-
+        throw err;
     }
 
     return res;

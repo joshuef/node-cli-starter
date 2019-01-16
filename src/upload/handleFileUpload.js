@@ -10,7 +10,7 @@ import logger from '../logger';
 
 export const delay = time => new Promise( resolve => setTimeout( resolve, time ) );
 
-export const handleFileUpload = async ( app, theFilePath, networkPath ) =>
+export const handleFileUpload = async ( app, theFilePath ) =>
 {
     logger.trace( 's-sync-handling-file-upload' )
 
@@ -49,10 +49,10 @@ export const handleFileUpload = async ( app, theFilePath, networkPath ) =>
 
         return {
             path : theFilePath,
-            uri  : `safe://${address.xorUrl}`
+            uri  : address.xorUrl
         }
 
-        logger.trace( 's-sync-handling-file-upload-work' )
+        logger.trace( 's-sync-handling-file-upload-work', address.xorUrl )
 
     }
     catch( err )
