@@ -47,9 +47,9 @@ export const handleFileUpload = async ( app, theFilePath ) =>
         const cipher = await app.cipherOpt.newPlainText();
         const address= await writer.close( cipher, true );
 
-        if( /dev/.test(process.env.NODE_ENV ) )
+        if( /dev/.test( process.env.NODE_ENV ) )
         {
-            await delay(2000);
+            await delay( 2000 );
         }
 
         return {

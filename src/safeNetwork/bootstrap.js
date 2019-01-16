@@ -102,7 +102,7 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
 
             fs.writeFile( PID_LOCATION, String( pid ), 'utf8', function ( err )
             {
-                logger.info('pid written ')
+                logger.info( 'pid written ' )
                 if ( err ) return console.log( err );
             } );
 
@@ -117,9 +117,9 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
     const app = await initialiseApp( appInfo, undefined, options );
     const registeredScheme = app.auth.registeredAppScheme;
 
-    if( !registeredScheme)
+    if( !registeredScheme )
     {
-        logger.error('Did not register a scheme :(')
+        logger.error( 'Did not register a scheme :(' )
     }
     const urlHelperPlistLocation = path.resolve( __dirname, '../../utils/url-helper.app/Contents/Info.plist' );
 
@@ -137,15 +137,15 @@ async function authorise ( pid, appInfo, appContainers, containerOpts, options )
         }
 
         // <string>safe-xxx</string>
-        const regex = new RegExp( `\<string\>${PLACEHOLDER_SCHEME}[A-Za-z0-9]*\<\/string\>`, 'g');
-        const present = regex.test(data);
+        const regex = new RegExp( `\<string\>${PLACEHOLDER_SCHEME}[A-Za-z0-9]*\<\/string\>`, 'g' );
+        const present = regex.test( data );
 
-        logger.info('WAS OUR TARGET FOUND?', present)
+        logger.info( 'WAS OUR TARGET FOUND?', present )
         const result = data.replace( regex, `<string>${registeredScheme}</string>` );
 
         fs.writeFile( urlHelperPlistLocation, result, 'utf8', function ( err )
         {
-            logger.info( 'plist updated', result);
+            logger.info( 'plist updated', result );
             if ( err ) return console.log( err );
         } );
     } );

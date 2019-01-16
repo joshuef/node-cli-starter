@@ -29,7 +29,7 @@ log.addTarget( 'file', { file: path.resolve( process.cwd(), logFileName )} )
     .withHighestSeverity( 'error' );
 
 log.addTarget( 'file', { file: path.resolve( __dirname, '..', logFileName )} )
-    .withFormatter('human')
+    .withFormatter( 'human' )
     .withLowestSeverity( 'debug' )
     .withHighestSeverity( 'error' );
 
